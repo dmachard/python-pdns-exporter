@@ -25,6 +25,7 @@ jobs:
         sudo docker exec -i mariadb sh -c 'exec mysql -u root -p"secret" powerdns' < schema.mysql.sql
 
     - name: Setup PowerDNS
+      run: |
         sudo docker run -d --network="host" --name=powerdns --volume=$PWD/testdata/pdns.conf:/etc/powerdns/pdns.conf:ro powerdns/pdns-auth-44:latest
         sudo docker exec powerdns pdnsutil create-zone test.internal ns1.test.internal
         sudo docker exec powerdns pdnsutil add-record test.internal ns1 A 3600 10.0.0.1
