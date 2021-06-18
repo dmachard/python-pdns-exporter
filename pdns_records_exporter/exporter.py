@@ -48,15 +48,18 @@ class Exporter:
         """export to zone file format"""
         bind_zones = []
         bind_zone_tpl = """
-        zone "%s" {
-                type master;
-                file "%s/db.%s";
-        };"""
+zone "%s" {
+        type master;
+        file "%s/db.%s";
+};"""
 
         for d in self.data_zones:
             zone = [ "$ORIGIN ." ]
             for r in d["records"]:
                 zone.append( "%s\t%s\tIN\t%s\t%s" % (r["name"], r["ttl"], r["type"], r["content"]) )
+
+            # end zone with newline
+            zone.append("")
 
             db_zone = "/%s/db.%s" % (output_path,d["name"])
             with open(db_zone, "w") as fz:

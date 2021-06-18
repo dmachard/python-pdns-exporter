@@ -17,7 +17,26 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: "3.8"
+
+    - name: Setup MariaDB
+      run: |
+        sudo docker run -d --network="host"--name mariadb -e MARIADB_ROOT_PASSWORD=secret -e MARIADB_DATABASE=powerdns -e MARIADB_USER=powerdns -e MARIADB_PASSWORD=powerdns mariadb:latest
+        sudo wget https://raw.githubusercontent.com/PowerDNS/pdns/master/modules/gmysqlbackend/schema.mysql.sql
+        sudo docker exec -i mariadb sh -c 'exec mysql -u root -p"secret" powerdns' < schema.mysql.sql
+
+    - name: Setup PowerDNS
+        sudo docker run -d --network="host" --name=powerdns --volume=$PWD/testdata/pdns.conf:/etc/powerdns/pdns.conf:ro powerdns/pdns-auth-44:latest
+        sudo docker exec powerdns pdnsutil create-zone test.internal ns1.test.internal
+        sudo docker exec powerdns pdnsutil add-record test.internal ns1 A 3600 10.0.0.1
+        sudo docker exec powerdns pdnsutil add-record test.internal record A 300 10.0.0.2
+
     - name: Run Python tests 
       run: |
         sudo python3 -m pip install pymysql 
         sudo python3 -m unittest tests.test_export
+
+    - name: Check zone format
+      run: |
+        sudo apt-get install -y bind9utils
+        sudo named-checkzone test.internal /tmp/db.test.internal
+        sudo named-checkconf /tmp/db.zones
