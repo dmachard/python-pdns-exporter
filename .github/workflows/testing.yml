@@ -19,4 +19,5 @@ jobs:
         python-version: "3.8"
     - name: Run Python tests 
       run: |
+        sudo python3 -m pip install pymysql 
         sudo python3 -m unittest tests.test_export
