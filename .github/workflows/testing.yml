@@ -41,4 +41,3 @@ jobs:
       run: |
         sudo apt-get install -y bind9utils
         sudo named-checkzone test.internal /tmp/db.test.internal
-        sudo named-checkconf /tmp/db.zones

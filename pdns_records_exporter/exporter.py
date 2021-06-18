@@ -1,4 +1,5 @@
 import pymysql
+import pathlib
 
 class Exporter:
     def __init__(self, host="127.0.0.1", port=3306, user="powerdns", passwd="", db="powerdns"):
@@ -29,6 +30,8 @@ class Exporter:
             fields = map(lambda x: x[0], cur.description)
             self.data_zones.append(dict(zip(fields, row)))
         
+        print("reading %s domain(s) from db..." % len(self.data_zones))
+
         # get records from databases
         for d in self.data_zones:
             cur.execute("SELECT * FROM records WHERE domain_id=%s", (d["id"],))
@@ -44,29 +47,28 @@ class Exporter:
         cur.close()
         conn.close()
 
-    def export(self, output_path="/tmp/", bind_zone_path = "/etc/bind"):
+    def export(self, output="/tmp/", zones=[], bindconf=False):
         """export to zone file format"""
-        bind_zones = []
-        bind_zone_tpl = """
-zone "%s" {
-        type master;
-        file "%s/db.%s";
-};"""
-
+        
+        print("exporting to zone file format...")
         for d in self.data_zones:
+            if len(zones):
+                if d["name"] not in zones:
+                    continue
+
             zone = [ "$ORIGIN ." ]
+
             for r in d["records"]:
                 zone.append( "%s\t%s\tIN\t%s\t%s" % (r["name"], r["ttl"], r["type"], r["content"]) )
 
             # end zone with newline
             zone.append("")
 
-            db_zone = "/%s/db.%s" % (output_path,d["name"])
-            with open(db_zone, "w") as fz:
+            db_zone = pathlib.Path(  "/%s/db.%s" % (output,d["name"]) ).resolve()
+            with open("%s" % db_zone, "w") as fz:
                 fz.write("\n".join(zone))
+                print("> %s" % db_zone )
 
-            bind_zones.append( bind_zone_tpl % (d["name"], bind_zone_path, d["name"]) )
-
-        # finally write db zones
-        with open( "%s/db.zones" % output_path, "w") as fz:
-            fz.write("\n".join(bind_zones))
+        # create bind config ?
+        if bindconf:
+            pass
