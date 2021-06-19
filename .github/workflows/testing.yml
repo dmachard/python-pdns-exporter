@@ -50,4 +50,15 @@ jobs:
     - name: Check zone format
       run: |
         sudo apt-get install -y bind9utils
-        sudo named-checkzone test.internal /tmp/db.test.internal
+        sudo named-checkzone zone.test /tmp/db.zone.test
+
+  testing-metrics:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+
+    - name: Run Python tests 
+      run: |
+        sudo python3 -m pip install pymysql 
+        sudo python3 -m unittest tests.test_metrics
