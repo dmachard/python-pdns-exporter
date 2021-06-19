@@ -9,7 +9,18 @@ on:
       - main
 
 jobs:
-  testing:
+  testing-config:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+
+    - name: Run Python tests 
+      run: |
+        sudo python3 -m pip install pymysql 
+        sudo python3 -m unittest tests.test_config
+
+  testing-export:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2

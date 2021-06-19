@@ -1,6 +1,12 @@
 # pdns-records-exporter
 
-PowerDNS records exporter to Bind zone format
+This is a python module to export PowerDNS records database in several ways:
+- export dns records to bind zone format
+- export dns records metrics
+
+Two modes are available to use this module:
+- by importing directly the module in your code
+- by running the server
 
 ## Installation
 
