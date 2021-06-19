@@ -17,6 +17,7 @@ jobs:
 
     - name: Run Python tests 
       run: |
+        sudo mkdir /etc/powerdns/
         sudo python3 -m pip install pymysql 
         sudo python3 -m unittest tests.test_config
 
