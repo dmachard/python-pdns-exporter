@@ -77,7 +77,7 @@ class PdnsExporter:
         for row in cur.fetchall():
             fields = map(lambda x: x[0], cur.description)
             self.data_zones.append(dict(zip(fields, row)))
-        
+
         print("reading %s domain(s) from db..." % len(self.data_zones))
 
         # get records from databases
@@ -99,6 +99,18 @@ class PdnsExporter:
         """export database metrics"""
         self.search_config()
         self.connect_mysql()
+
+        metrics = {}
+        rtypes = ["A", "AAAA", "TXT", "CNAME", "PTR", "MX", "NS"]
+
+        metrics["total_domains"] = len(self.data_zones)
+        for rtype in rtypes: metrics["total_%s" % rtype] = 0 
+        
+        for d in self.data_zones:
+            for rtype in rtypes:
+                metrics["total_%s" % rtype] = len([_d for _d in d["records"] if _d.get('type')==rtype])
+
+        return metrics
 
     def export(self, output="/tmp/", zones=[], bindconf=True, binddb_path="/etc/bind/"):
         """export to zone file format"""

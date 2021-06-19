@@ -33,7 +33,7 @@ class TestExport(TestCase):
         
     def test_export_mysql_to_bind_zone(self):
         """export to bind zone format"""  
-        path_zone =  "/tmp/db.test.internal"     
+        path_zone =  "/tmp/db.zone.test"     
         if os.path.exists(path_zone): os.remove(path_zone)     
 
         # run the exporter

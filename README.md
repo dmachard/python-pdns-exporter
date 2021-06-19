@@ -34,3 +34,7 @@ handler.export()
 ```
 
 By default, the dns zone files are created in the /tmp folder.
+
+## To create the sql from a zone
+
+zone2sql --zone=example.com --gmysql=yes --zone-name=example.com > example.com.sql
