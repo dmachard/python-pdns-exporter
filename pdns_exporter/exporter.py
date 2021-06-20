@@ -103,7 +103,7 @@ class PdnsExporter:
         metrics = {}
         rtypes = ["A", "AAAA", "TXT", "CNAME", "PTR", "MX", "NS"]
 
-        metrics["total_domains"] = len(self.data_zones)
+        metrics["total_zones"] = len(self.data_zones)
         for rtype in rtypes: metrics["total_%s" % rtype] = 0 
         
         for d in self.data_zones:

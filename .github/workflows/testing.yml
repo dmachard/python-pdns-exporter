@@ -40,7 +40,8 @@ jobs:
     - name: Setup PowerDNS
       run: |
         sudo docker run -d --network="host" --name powerdns --volume=$PWD/testdata/pdns.conf:/etc/powerdns/pdns.conf:ro powerdns/pdns-auth-44:latest
-        sudo docker exec -i mariadb sh -c 'exec mysql -u root -p"secret" powerdns' < testdata/zone.test.sql
+        sudo chmod +x ./testdata/initzone.sh
+        sudo ./testdata/initzone.sh
 
     - name: Run Python tests 
       run: |
