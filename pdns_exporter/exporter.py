@@ -96,20 +96,25 @@ class PdnsExporter:
         conn.close()
 
     def metrics(self):
-        """export database metrics"""
+        """export database metrics as python dict"""
         self.search_config()
         self.connect_mysql()
 
         metrics = {}
-        rtypes = ["A", "AAAA", "TXT", "CNAME", "PTR", "MX", "NS"]
+        rtypes = ["SOA", "A", "AAAA", "TXT", "CNAME", "PTR", "MX", "NS", "SVR", "PTR", "MX"]
 
         metrics["total_zones"] = len(self.data_zones)
-        for rtype in rtypes: metrics["total_%s" % rtype] = 0 
+        metrics["total_records"] = 0
+        for rtype in rtypes: metrics["total_records_%s" % rtype.lower()] = 0 
         
         for d in self.data_zones:
-            for rtype in rtypes:
-                metrics["total_%s" % rtype] = len([_d for _d in d["records"] if _d.get('type')==rtype])
+            metrics["total_records"] += len(d["records"])
+            metrics["total_records[%s]" % d["name"]] = len(d["records"])
 
+            for rtype in rtypes:
+                metrics["total_records_%s" % rtype.lower()] += len([_d for _d in d["records"] if _d.get('type')==rtype])
+                metrics["total_records_%s[%s]" % (rtype.lower(),d["name"])] = len([_d for _d in d["records"] if _d.get('type')==rtype])
+                
         return metrics
 
     def export(self, output="/tmp/", zones=[], bindconf=True, binddb_path="/etc/bind/"):

@@ -19,7 +19,7 @@ jobs:
       run: |
         sudo mkdir /etc/powerdns/
         sudo python3 -m pip install pymysql 
-        sudo python3 -m unittest tests.test_config
+        sudo python3 -m unittest tests.test_config -v
 
   testing-export:
     runs-on: ubuntu-20.04
@@ -46,8 +46,8 @@ jobs:
     - name: Run Python tests 
       run: |
         sudo python3 -m pip install pymysql 
-        sudo python3 -m unittest tests.test_export
-        sudo python3 -m unittest tests.test_metrics
+        sudo python3 -m unittest tests.test_export -v
+        sudo python3 -m unittest tests.test_metrics -v
 
     - name: Check zone format
       run: |
