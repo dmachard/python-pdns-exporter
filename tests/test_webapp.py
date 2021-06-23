@@ -63,6 +63,9 @@ class TestWebapp(aiohttp.test_utils.AioHTTPTestCase):
             plaintext = await r.text()
             assert "$ORIGIN ." in plaintext
 
+            with open("/tmp/db.zone.test", "w") as f:
+                f.write(plaintext)
+
     @aiohttp.test_utils.unittest_run_loop
     async def test_get_metrics(self):
         """get metrics"""

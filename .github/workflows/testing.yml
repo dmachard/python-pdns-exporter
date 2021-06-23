@@ -45,9 +45,10 @@ jobs:
 
     - name: Run Python tests 
       run: |
-        sudo python3 -m pip install pymysql 
-        sudo python3 -m unittest tests.test_export -v
-        sudo python3 -m unittest tests.test_metrics -v
+        sudo python3 -m pip install -r requirements.txt 
+        sudo python3 -m unittest tests.test_config -v
+        sudo python3 -m unittest tests.test_webapp -v
+        sudo python3 -m unittest tests.test_package -v
 
     - name: Check zone format
       run: |
