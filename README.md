@@ -12,7 +12,7 @@ This module can be used to export PowerDNS records database in several ways:
 Deploy the pdns records exporter in your server with the pip command.
 
 ```python
-pip install python_pdns_exporter
+pip install pdns_exporter
 ```
 
 After installation, you can execute the `pdns_exporter` to start-it.
