@@ -1,0 +1,3 @@
+include pdns_exporter/settings.conf
+
+recursive-include pdns_exporter/ *.py
