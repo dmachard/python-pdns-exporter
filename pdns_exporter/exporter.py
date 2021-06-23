@@ -1,156 +1,123 @@
-import pymysql
-import pathlib
+
 import logging
 import sys
+import argparse
+import pkgutil
+import pathlib
 import configparser
+import os
 
-from pdns_exporter import setup_logger
+from pdns_exporter import webapp
 
-logger = setup_logger("exporter")
+logger = logging.getLogger("pdnsexporter")
 
-bind_zone_tpl = """
-zone "%s" {
-    type master;
-    file "%s";
-};
-"""
+def setup_cli():
+    """setup command-line arguments"""
+    options = argparse.ArgumentParser()          
+    options.add_argument("-c", help="external config file")   
+    options.add_argument('-v', action='store_true', help="verbose mode")
 
-pdns_config = [
-    "/etc/powerdns/pdns.conf.test", # for test unit
-    "/etc/powerdns/pdns.conf",
-    "/etc/pdns/pdns.conf"
-]
+    return options
 
-class PdnsExporter:
-    def __init__(self, host="127.0.0.1", port=3306, user="powerdns", passwd="", db="powerdns", connect_timeout=10):
-        """exporter class"""
-        self.host = host
-        self.port = port
-        self.user = user
-        self.passwd = passwd
-        self.db = db
-        self.connect_timeout = connect_timeout
+def setup_logger(cfg):
+    loglevel = logging.DEBUG if int(cfg["logs-verbose"]) else logging.INFO
+    logfmt = '%(asctime)s %(levelname)s %(message)s'
+    
+    logger.setLevel(loglevel)
+    logger.propagate = False
+    
+    lh = logging.StreamHandler(stream=sys.stdout )
+    lh.setLevel(loglevel)
+    lh.setFormatter(logging.Formatter(logfmt))    
+    
+    logger.addHandler(lh)
 
-        self.data_zones = []
+def setup_config(args):
+    """load default config and update it with arguments or external config"""
+    cfg = {}
+    parser = configparser.ConfigParser()
 
-    def search_config(self, search_local=True):
-        """search config file, support powerdns file"""
-        # init the parser
-        parser = configparser.ConfigParser()
+    # Set the default configuration file
+    content = pkgutil.get_data(__package__, 'settings.conf')
+    parser.read_string("[DEFAULT]\n" + content.decode())
+    cfg = parser.defaults()
 
-        # search powerdns config file style on the system
-        if search_local:
-            for cfg in pdns_config:
-                f = pathlib.Path(cfg)
-                if f.exists():
-                    logger.debug("reading configuration from %s" % f)
-                    with open(f) as cfg_fd:
-                        parser.read_string("[cfg]\n" + cfg_fd.read())
-                    break
-            
-            # config to read ?
-            if len(parser.sections()):
-                if parser.get("cfg", "launch") == "gmysql":
-                    self.host = parser.get("cfg", "gmysql-host")
-                    self.port = parser.getint("cfg", "gmysql-port")
-                    self.user = parser.get("cfg", "gmysql-user")
-                    self.passwd = parser.get("cfg", "gmysql-password")
-                    self.db = parser.get("cfg", "gmysql-dbname")
+    # Overwrites then with the external file ?    
+    if args.c: 
+        with open(pathlib.Path(args.c), "r") as fd:
+            parser.read_string("[DEFAULT]\n" + fd.read())
+            cfg_ext = parser.defaults()
+        cfg.update(cfg_ext)
 
-        else:
-            logger.debug("loading default configuration")
+    # Or searches for a file named dnstap.conf in /etc/pdns-exporter/       
+    else:
+        f = pathlib.Path("/etc/pdns-exporter/settings.conf")
+        if f.exists():
+            with open(pathlib.Path(args.c), "r") as fd:
+                parser.read_string("[DEFAULT]\n" + fd.read())
+                cfg_ext = parser.defaults()
+            cfg.update(cfg_ext)
 
-    def connect_mysql(self):
-        """connect to the database and extract records"""
+    # update verbose mode with command line arguments
+    if args.v:
+        cfg["logs-verbose"] = args.v
 
-        conn = pymysql.connect( host=self.host, port=self.port,
-                                user=self.user, passwd=self.passwd,
-                                db=self.db,
-                                connect_timeout=self.connect_timeout)
+    # finally overwrites config with environment variables
+    ENV_VERBOSE = os.getenv('EXPORTER_VERBOSE')
+    if ENV_VERBOSE is not None:
+        cfg["logs-verbose"] = ENV_VERBOSE
 
-        # get domains from database
-        self.data_zones.clear()
+    ENV_LOCAL_ADDRESS = os.getenv('EXPORTER_LOCAL_ADDRESS')
+    if ENV_LOCAL_ADDRESS is not None:
+        cfg["local-address"] = ENV_LOCAL_ADDRESS
 
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM domains")
+    ENV_LOCAL_PORT = os.getenv('EXPORTER_LOCAL_PORT')
+    if ENV_LOCAL_PORT is not None:
+        cfg["local-port"] = ENV_LOCAL_PORT
 
-        for row in cur.fetchall():
-            fields = map(lambda x: x[0], cur.description)
-            self.data_zones.append(dict(zip(fields, row)))
+    ENV_API_LOGIN = os.getenv('EXPORTER_API_LOGIN')
+    if ENV_API_LOGIN is not None:
+        cfg["api-login"] = ENV_API_LOGIN
 
-        print("reading %s domain(s) from db..." % len(self.data_zones))
+    ENV_API_PWD = os.getenv('EXPORTER_API_PASSWORD')
+    if ENV_API_PWD is not None:
+        cfg["api-password"] = ENV_API_PWD
 
-        # get records from databases
-        for d in self.data_zones:
-            cur.execute("SELECT * FROM records WHERE domain_id=%s", (d["id"],))
+    ENV_DB_HOST = os.getenv('EXPORTER_DB_HOST')
+    if ENV_DB_HOST is not None:
+        cfg["db-pdns-host"] = ENV_DB_HOST
 
-            records = []
-            for row in cur.fetchall():
-                fields = map(lambda x: x[0], cur.description)
-                records.append(dict(zip(fields, row)))
+    ENV_DB_PORT = os.getenv('EXPORTER_DB_PORT')
+    if ENV_DB_PORT is not None:
+        cfg["db-pdns-port"] = ENV_DB_PORT
 
-            d["records"] = records
-            
-        # close conn
-        cur.close()
-        conn.close()
+    ENV_DB_USER = os.getenv('EXPORTER_DB_USER')
+    if ENV_DB_USER is not None:
+        cfg["db-pdns-user"] = ENV_DB_USER
 
-    def metrics(self):
-        """export database metrics as python dict"""
-        self.search_config()
-        self.connect_mysql()
+    ENV_DB_PWD = os.getenv('EXPORTER_DB_PWD')
+    if ENV_DB_PWD is not None:
+        cfg["db-pdns-password"] = ENV_DB_PWD
 
-        metrics = {}
-        rtypes = ["SOA", "A", "AAAA", "TXT", "CNAME", "PTR", "MX", "NS", "SVR", "PTR", "MX"]
+    ENV_DB_NAME = os.getenv('EXPORTER_DB_NAME')
+    if ENV_DB_NAME is not None:
+        cfg["db-pdns-name"] = ENV_DB_NAME
 
-        metrics["total_zones"] = len(self.data_zones)
-        metrics["total_records"] = 0
-        for rtype in rtypes: metrics["total_records_%s" % rtype.lower()] = 0 
-        
-        for d in self.data_zones:
-            metrics["total_records"] += len(d["records"])
-            metrics["total_records[%s]" % d["name"]] = len(d["records"])
+    return cfg
 
-            for rtype in rtypes:
-                metrics["total_records_%s" % rtype.lower()] += len([_d for _d in d["records"] if _d.get('type')==rtype])
-                metrics["total_records_%s[%s]" % (rtype.lower(),d["name"])] = len([_d for _d in d["records"] if _d.get('type')==rtype])
-                
-        return metrics
+def start_exporter():
+    """start exporter as server"""
+    # setup command-line arguments.
+    options = setup_cli()
+    args = options.parse_args()
 
-    def export(self, output="/tmp/", zones=[], bindconf=True, binddb_path="/etc/bind/"):
-        """export to zone file format"""
+    # setup config
+    cfg = setup_config(args=args)
+    
+    # setup logger
+    setup_logger(cfg=cfg)
 
-        self.search_config()
-        self.connect_mysql()
+    logger.debug("config OK, starting...")
 
-        print("exporting to zone file format...")
-        bind_zones = []
-        for d in self.data_zones:
-            if len(zones):
-                if d["name"] not in zones:
-                    continue
-
-            zone = [ "$ORIGIN ." ]
-
-            for r in d["records"]:
-                zone.append( "%s\t%s\tIN\t%s\t%s" % (r["name"], r["ttl"], r["type"], r["content"]) )
-
-            # end zone with newline
-            zone.append("")
-
-            db_zone = pathlib.Path(  "/%s/db.%s" % (output,d["name"]) ).resolve()
-            with open("%s" % db_zone, "w") as fz:
-                fz.write("\n".join(zone))
-                print("> %s" % db_zone )
-
-            bind_db_path = pathlib.Path( "%s/db.%s" % (binddb_path, d["name"]))
-            bind_zones.append( bind_zone_tpl % (d["name"], "%s" % bind_db_path) )
-            
-        # create bind config ?
-        if bindconf:
-            bind_zones.append("")
-
-            db_zones = pathlib.Path( "%s/db.zones" % output )
-            with open( "%s" % db_zones, "w") as fz:
-                fz.write("\n".join(bind_zones))
-            print("> %s" % db_zones )
+    # setup webserver
+    webapp.run(cfg=cfg)

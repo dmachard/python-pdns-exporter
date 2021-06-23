@@ -1,0 +1,111 @@
+# HELP pdnsexporter_zones_total Total number of zones
+# TYPE pdnsexporter_zones_total counter
+pdnsexporter_zones_total 4
+# HELP pdnsexporter_records_total Total number of records
+# TYPE pdnsexporter_records_total counter
+pdnsexporter_records_total 32
+# HELP pdnsexporter_records_soa_total Total number of records SOA
+# TYPE pdnsexporter_records_soa_total counter
+pdnsexporter_records_soa_total 4
+# HELP pdnsexporter_records_a_total Total number of records A
+# TYPE pdnsexporter_records_a_total counter
+pdnsexporter_records_a_total 14
+# HELP pdnsexporter_records_aaaa_total Total number of records AAAA
+# TYPE pdnsexporter_records_aaaa_total counter
+pdnsexporter_records_aaaa_total 1
+# HELP pdnsexporter_records_txt_total Total number of records TXT
+# TYPE pdnsexporter_records_txt_total counter
+pdnsexporter_records_txt_total 6
+# HELP pdnsexporter_records_cname_total Total number of records CNAME
+# TYPE pdnsexporter_records_cname_total counter
+pdnsexporter_records_cname_total 3
+# HELP pdnsexporter_records_ptr_total Total number of records PTR
+# TYPE pdnsexporter_records_ptr_total counter
+pdnsexporter_records_ptr_total 0
+# HELP pdnsexporter_records_mx_total Total number of records MX
+# TYPE pdnsexporter_records_mx_total counter
+pdnsexporter_records_mx_total 0
+# HELP pdnsexporter_records_ns_total Total number of records NS
+# TYPE pdnsexporter_records_ns_total counter
+pdnsexporter_records_ns_total 4
+# HELP pdnsexporter_records_svr_total Total number of records SVR
+# TYPE pdnsexporter_records_svr_total counter
+pdnsexporter_records_svr_total 0
+# HELP pdnsexporter_records_ptr_total Total number of records PTR
+# TYPE pdnsexporter_records_ptr_total counter
+pdnsexporter_records_ptr_total 0
+# HELP pdnsexporter_records_mx_total Total number of records MX
+# TYPE pdnsexporter_records_mx_total counter
+pdnsexporter_records_mx_total 0
+# HELP pdnsexporter_records Number of records
+# TYPE pdnsexporter_records counter
+# HELP pdnsexporter_records_soa Number of records SOA
+# TYPE pdnsexporter_records_soa counter
+# HELP pdnsexporter_records_a Number of records A
+# TYPE pdnsexporter_records_a counter
+# HELP pdnsexporter_records_aaaa Number of records AAAA
+# TYPE pdnsexporter_records_aaaa counter
+# HELP pdnsexporter_records_txt Number of records TXT
+# TYPE pdnsexporter_records_txt counter
+# HELP pdnsexporter_records_cname Number of records CNAME
+# TYPE pdnsexporter_records_cname counter
+# HELP pdnsexporter_records_ptr Number of records PTR
+# TYPE pdnsexporter_records_ptr counter
+# HELP pdnsexporter_records_mx Number of records MX
+# TYPE pdnsexporter_records_mx counter
+# HELP pdnsexporter_records_ns Number of records NS
+# TYPE pdnsexporter_records_ns counter
+# HELP pdnsexporter_records_svr Number of records SVR
+# TYPE pdnsexporter_records_svr counter
+# HELP pdnsexporter_records_ptr Number of records PTR
+# TYPE pdnsexporter_records_ptr counter
+# HELP pdnsexporter_records_mx Number of records MX
+# TYPE pdnsexporter_records_mx counter
+pdnsexporter_records{identity="pdnsexporter.internal"} 6
+pdnsexporter_records_soa{identity="pdnsexporter.internal"} 1
+pdnsexporter_records_a{identity="pdnsexporter.internal"} 2
+pdnsexporter_records_aaaa{identity="pdnsexporter.internal"} 0
+pdnsexporter_records_txt{identity="pdnsexporter.internal"} 1
+pdnsexporter_records_cname{identity="pdnsexporter.internal"} 1
+pdnsexporter_records_ptr{identity="pdnsexporter.internal"} 0
+pdnsexporter_records_mx{identity="pdnsexporter.internal"} 0
+pdnsexporter_records_ns{identity="pdnsexporter.internal"} 1
+pdnsexporter_records_svr{identity="pdnsexporter.internal"} 0
+pdnsexporter_records_ptr{identity="pdnsexporter.internal"} 0
+pdnsexporter_records_mx{identity="pdnsexporter.internal"} 0
+# HELP pdnsexporter_records Number of records
+# TYPE pdnsexporter_records counter
+# HELP pdnsexporter_records_soa Number of records SOA
+# TYPE pdnsexporter_records_soa counter
+# HELP pdnsexporter_records_a Number of records A
+# TYPE pdnsexporter_records_a counter
+# HELP pdnsexporter_records_aaaa Number of records AAAA
+# TYPE pdnsexporter_records_aaaa counter
+# HELP pdnsexporter_records_txt Number of records TXT
+# TYPE pdnsexporter_records_txt counter
+# HELP pdnsexporter_records_cname Number of records CNAME
+# TYPE pdnsexporter_records_cname counter
+# HELP pdnsexporter_records_ptr Number of records PTR
+# TYPE pdnsexporter_records_ptr counter
+# HELP pdnsexporter_records_mx Number of records MX
+# TYPE pdnsexporter_records_mx counter
+# HELP pdnsexporter_records_ns Number of records NS
+# TYPE pdnsexporter_records_ns counter
+# HELP pdnsexporter_records_svr Number of records SVR
+# TYPE pdnsexporter_records_svr counter
+# HELP pdnsexporter_records_ptr Number of records PTR
+# TYPE pdnsexporter_records_ptr counter
+# HELP pdnsexporter_records_mx Number of records MX
+# TYPE pdnsexporter_records_mx counter
+pdnsexporter_records{identity="test.internal"} 4
+pdnsexporter_records_soa{identity="test.internal"} 1
+pdnsexporter_records_a{identity="test.internal"} 2
+pdnsexporter_records_aaaa{identity="test.internal"} 0
+pdnsexporter_records_txt{identity="test.internal"} 0
+pdnsexporter_records_cname{identity="test.internal"} 0
+pdnsexporter_records_ptr{identity="test.internal"} 0
+pdnsexporter_records_mx{identity="test.internal"} 0
+pdnsexporter_records_ns{identity="test.internal"} 1
+pdnsexporter_records_svr{identity="test.internal"} 0
+pdnsexporter_records_ptr{identity="test.internal"} 0
+pdnsexporter_records_mx{identity="test.internal"} 0

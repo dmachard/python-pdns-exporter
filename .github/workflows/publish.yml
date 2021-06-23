@@ -1,0 +1,50 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish-pypi:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip setuptools wheel
+        pip install twine
+
+    - name: Build Python package
+      run: |
+        python setup_init.py pkgversion ${{ github.event.release.tag_name }}
+        python setup.py sdist bdist_wheel
+
+    - name: Twine check
+      run: |
+        twine check dist/*
+
+    - name: Upload to PyPI
+      run: |
+        twine upload dist/* -u ${{ secrets.PYPI_LOGIN }} -p ${{ secrets.PYPI_PASSWORD }}
+
+  publish-dockerhub:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build the Docker image
+      run: |
+        docker build . --file Dockerfile -t pdns-exporter
+
+    - name: Tag image
+      run: |
+        docker tag pdns-exporter dmachard/pdns-exporter:${{ github.event.release.tag_name }}
+        docker tag pdns-exporter dmachard/pdns-exporter:latest
+
+    - name: Upload to DockerHub
+      run: |
+        docker login -u ${{ secrets.DOCKERHUB_LOGIN }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+        docker push dmachard/pdns-exporter:latest
+        docker push dmachard/pdns-exporter:${{ github.event.release.tag_name }}

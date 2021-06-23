@@ -1,0 +1,72 @@
+openapi: 3.0.2
+info:
+  title: Swagger for pdns exporter
+  version: 3.0.0
+  description: This is a swagger for the API of the pdns exporter.
+  contact:
+    email: d.machard@gmail.com
+  license:
+    name: MIT
+    url: 'https://github.com/dmachard/python-pdns-exporter/blob/master/LICENSE'
+  x-logo:
+    url: ''
+servers:
+  - url: 'http://localhost/'
+
+paths:
+  /metrics:
+    get:
+      summary: Get metrics
+      responses:
+        '200':
+          description: Metrics in prometheus format
+          content:
+            text/plain:
+              schema:
+                type: string
+  /zones:
+    get:
+      summary: Get zones list
+      responses:
+        '200':
+          description: 'zones list'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZonesResponse'
+  /zone:
+    get:
+      summary: Get bind zone format
+      parameters:
+        - in: path
+          name: zoneId
+          schema:
+            type: integer
+          required: true
+          description: ID of the zone
+      responses:
+        '200':
+          description: bind zone format
+          content:
+            text/plain:
+              schema:
+                type: string
+
+components:
+  schemas:
+    ZonesResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        names:
+          type: string
+  securitySchemes: {}
+  responses: {}
+  parameters: {}
+
+tags: []
+security: []
+
+externalDocs:
+  url: 'https://github.com/dmachard/python-pdns-exporter'

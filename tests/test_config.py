@@ -1,60 +1,56 @@
 import unittest
-import pathlib 
 import os
-import configparser
 
-import pdns_exporter
+from pdns_exporter import exporter
 
-class TestExport(unittest.TestCase):
+EXTERNAL_SETTINGS_PATH = "/etc/pdns-exporter/settings.conf.test"
+
+class args:
+    c = None
+    v = False
+
+class TestConfig(unittest.TestCase):
     def tearDown(self):
         """clear test data"""
         try:
-            os.remove( "/etc/powerdns/pdns.conf.test")
+            os.remove(EXTERNAL_SETTINGS_PATH)
+        except: pass
+
+        try:
+            os.environ.pop("EXPORTER_LOCAL_PORT")
         except: pass
         
-    def test_config_default(self):
-        """default config"""  
+    def test_default_config(self):
+        """read default config"""
+        # read config
+        cfg = exporter.setup_config(args=args())
 
-        with self.assertLogs('exporter', level='DEBUG') as cm:
-            exporter = pdns_exporter.PdnsExporter()
-            exporter.search_config(search_local=False)
+        self.assertFalse(int(cfg["logs-verbose"]))
+        self.assertEqual(cfg["local-address"], "0.0.0.0")
+        self.assertEqual(int(cfg["local-port"]), 9090)
 
-        self.assertEqual(cm.output, ['DEBUG:exporter:loading default configuration'])
+    def test_overwrite_config_external(self):
+        """overwrite config with external file"""
+        _args = args()
+        _args.c = EXTERNAL_SETTINGS_PATH
 
-    def test_config_powerdns_valid(self):
-        """valid config"""
-        path_cfg =  "/etc/powerdns/pdns.conf.test"
+        cfg_ext = ["local-address=127.0.0.1", "local-port=8080"]
+        with open(_args.c , "w") as f:
+           f.write("\n".join(cfg_ext))
 
-        cfg = ["launch=gmysql", "gmysql-host=127.0.0.1", "gmysql-port=3306", 
-               "gmysql-dbname=powerdns", "gmysql-user=powerdns", "gmysql-password=powerdns"]
-        with open(path_cfg, "w") as f:
-           f.write("\n".join(cfg))
+        # read config
+        cfg = exporter.setup_config(args=_args)
 
-        with self.assertLogs('exporter', level='DEBUG') as cm:
-            exporter = pdns_exporter.PdnsExporter()
-            exporter.search_config()
+        assert cfg["local-port"] == "8080"
+    
+    def test_overwrite_config_env(self):
+        """overwrite config with env variables"""
+        os.environ['EXPORTER_LOCAL_PORT'] = "8888"
 
-        self.assertEqual(cm.output, ['DEBUG:exporter:reading configuration from /etc/powerdns/pdns.conf.test'])
+        # read config
+        cfg = exporter.setup_config(args=args())
 
-    def test_config_powerdns_invalid1(self):
-        """invalid powerdns config"""
-        path_cfg =  "/etc/powerdns/pdns.conf.test"
+        # remove variable from environment for other test
+        os.environ.pop("EXPORTER_LOCAL_PORT")
 
-        with open(path_cfg, "w") as f:
-            f.write("invalid")
-
-        with self.assertRaises(configparser.ParsingError) as cm:
-            exporter = pdns_exporter.PdnsExporter()
-            exporter.search_config()
-
-    def test_config_powerdns_invalid2(self):
-        """invalid powerdns config; key missing"""
-        path_cfg =  "/etc/powerdns/pdns.conf.test"
-
-        cfg = ["gmysql-host=127.0.0.1", "gmysql-port=3306"]
-        with open(path_cfg, "w") as f:
-           f.write("\n".join(cfg))
-
-        with self.assertRaises(configparser.NoOptionError) as cm:
-            exporter = pdns_exporter.PdnsExporter()
-            exporter.search_config()
+        self.assertEqual(cfg["local-port"], "8888")
