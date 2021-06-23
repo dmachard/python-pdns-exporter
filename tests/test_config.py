@@ -17,7 +17,7 @@ class TestConfig(unittest.TestCase):
         except: pass
 
         try:
-            os.environ.pop("EXPORTER_LOCAL_PORT")
+            os.environ.pop("PDNSEXPORT_LOCAL_PORT")
         except: pass
         
     def test_default_config(self):
@@ -45,12 +45,12 @@ class TestConfig(unittest.TestCase):
     
     def test_overwrite_config_env(self):
         """overwrite config with env variables"""
-        os.environ['EXPORTER_LOCAL_PORT'] = "8888"
+        os.environ['PDNSEXPORT_LOCAL_PORT'] = "8888"
 
         # read config
         cfg = exporter.setup_config(args=args())
 
         # remove variable from environment for other test
-        os.environ.pop("EXPORTER_LOCAL_PORT")
+        os.environ.pop("PDNSEXPORT_LOCAL_PORT")
 
         self.assertEqual(cfg["local-port"], "8888")

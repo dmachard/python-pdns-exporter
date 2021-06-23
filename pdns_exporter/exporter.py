@@ -63,43 +63,43 @@ def setup_config(args):
         cfg["logs-verbose"] = args.v
 
     # finally overwrites config with environment variables
-    ENV_VERBOSE = os.getenv('EXPORTER_VERBOSE')
+    ENV_VERBOSE = os.getenv('PDNSEXPORT_VERBOSE')
     if ENV_VERBOSE is not None:
         cfg["logs-verbose"] = ENV_VERBOSE
 
-    ENV_LOCAL_ADDRESS = os.getenv('EXPORTER_LOCAL_ADDRESS')
+    ENV_LOCAL_ADDRESS = os.getenv('PDNSEXPORT_LOCAL_ADDRESS')
     if ENV_LOCAL_ADDRESS is not None:
         cfg["local-address"] = ENV_LOCAL_ADDRESS
 
-    ENV_LOCAL_PORT = os.getenv('EXPORTER_LOCAL_PORT')
+    ENV_LOCAL_PORT = os.getenv('PDNSEXPORT_LOCAL_PORT')
     if ENV_LOCAL_PORT is not None:
         cfg["local-port"] = ENV_LOCAL_PORT
 
-    ENV_API_LOGIN = os.getenv('EXPORTER_API_LOGIN')
+    ENV_API_LOGIN = os.getenv('PDNSEXPORT_API_LOGIN')
     if ENV_API_LOGIN is not None:
         cfg["api-login"] = ENV_API_LOGIN
 
-    ENV_API_PWD = os.getenv('EXPORTER_API_PASSWORD')
+    ENV_API_PWD = os.getenv('PDNSEXPORT_API_PASSWORD')
     if ENV_API_PWD is not None:
         cfg["api-password"] = ENV_API_PWD
 
-    ENV_DB_HOST = os.getenv('EXPORTER_DB_HOST')
+    ENV_DB_HOST = os.getenv('PDNSEXPORT_DB_HOST')
     if ENV_DB_HOST is not None:
         cfg["db-pdns-host"] = ENV_DB_HOST
 
-    ENV_DB_PORT = os.getenv('EXPORTER_DB_PORT')
+    ENV_DB_PORT = os.getenv('PDNSEXPORT_DB_PORT')
     if ENV_DB_PORT is not None:
         cfg["db-pdns-port"] = ENV_DB_PORT
 
-    ENV_DB_USER = os.getenv('EXPORTER_DB_USER')
+    ENV_DB_USER = os.getenv('PDNSEXPORT_DB_USER')
     if ENV_DB_USER is not None:
         cfg["db-pdns-user"] = ENV_DB_USER
 
-    ENV_DB_PWD = os.getenv('EXPORTER_DB_PWD')
+    ENV_DB_PWD = os.getenv('PDNSEXPORT_DB_PWD')
     if ENV_DB_PWD is not None:
         cfg["db-pdns-password"] = ENV_DB_PWD
 
-    ENV_DB_NAME = os.getenv('EXPORTER_DB_NAME')
+    ENV_DB_NAME = os.getenv('PDNSEXPORT_DB_NAME')
     if ENV_DB_NAME is not None:
         cfg["db-pdns-name"] = ENV_DB_NAME
 

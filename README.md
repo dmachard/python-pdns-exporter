@@ -38,16 +38,16 @@ The container can be configured with the following environment variables:
 
 | Variables | Description |
 | ------------- | ------------- |
-| EXPORTER_VERBOSE | 1 or 0 to enable verbose mode |
-| EXPORTER_LOCAL_ADDRESS | listening ip address of the server |
-| EXPORTER_LOCAL_PORT | listening port |
-| EXPORTER_API_LOGIN | login for basic authentication |
-| EXPORTER_API_PASSWORD | password for basic authentication |
-| EXPORTER_DB_HOST | Ip address of your database powerdns server |
-| EXPORTER_DB_PORT | Port of your database powerdns server  |
-| EXPORTER_DB_USER | User database of your powerdns server  |
-| EXPORTER_DB_PWD | Password database of your powerdns server  |
-| EXPORTER_DB_NAME | Database name of your powerdns server |
+| PDNSEXPORT_VERBOSE | 1 or 0 to enable verbose mode |
+| PDNSEXPORT_LOCAL_ADDRESS | listening ip address of the server |
+| PDNSEXPORT_LOCAL_PORT | listening port |
+| PDNSEXPORT_API_LOGIN | login for basic authentication |
+| PDNSEXPORT_API_PASSWORD | password for basic authentication |
+| PDNSEXPORT_DB_HOST | Ip address of your database powerdns server |
+| PDNSEXPORT_DB_PORT | Port of your database powerdns server  |
+| PDNSEXPORT_DB_USER | User database of your powerdns server  |
+| PDNSEXPORT_DB_PWD | Password database of your powerdns server  |
+| PDNSEXPORT_DB_NAME | Database name of your powerdns server |
 
 
 ## HTTP API
