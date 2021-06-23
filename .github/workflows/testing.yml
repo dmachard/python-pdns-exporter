@@ -17,8 +17,8 @@ jobs:
 
     - name: Run Python tests 
       run: |
-        sudo mkdir /etc/powerdns/
-        sudo python3 -m pip install pymysql 
+        sudo mkdir /etc/pdns-exporter/
+        sudo python3 -m pip install -r requirements.txt 
         sudo python3 -m unittest tests.test_config -v
 
   testing-export:
@@ -46,7 +46,6 @@ jobs:
     - name: Run Python tests 
       run: |
         sudo python3 -m pip install -r requirements.txt 
-        sudo python3 -m unittest tests.test_config -v
         sudo python3 -m unittest tests.test_webapp -v
         sudo python3 -m unittest tests.test_package -v
 
