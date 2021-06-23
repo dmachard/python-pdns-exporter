@@ -11,7 +11,7 @@ info:
   x-logo:
     url: ''
 servers:
-  - url: 'http://localhost/'
+  - url: 'http://localhost:9090/'
 
 paths:
   /metrics:
