@@ -21,7 +21,7 @@ jobs:
         sudo python3 -m pip install -r requirements.txt 
         sudo python3 -m unittest tests.test_config -v
 
-  testing-export:
+  testing-api:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
@@ -52,4 +52,5 @@ jobs:
     - name: Check zone format
       run: |
         sudo apt-get install -y bind9utils
+        sudo cat /tmp/db.zone.test
         sudo named-checkzone zone.test /tmp/db.zone.test
