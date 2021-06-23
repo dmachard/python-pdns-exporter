@@ -3,6 +3,9 @@ import jinja2
 
 
 def init_setup(pkgversion):
+    if pkgversion.startswith("v"):
+        pkgversion = pkgversion[1:]
+        
     # open the jinja2 template
     with open("setup.j2") as f:
         setup_tpl = f.read()

@@ -103,6 +103,8 @@ pdnsexporter_records_total 32
 ...
 ```
 
+See [metrics file](/metrics.txt) example.
+
 ## Development
 
 ### Run 
