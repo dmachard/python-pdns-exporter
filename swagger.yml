@@ -59,7 +59,7 @@ components:
       properties:
         id:
           type: integer
-        names:
+        name:
           type: string
   securitySchemes: {}
   responses: {}
