@@ -1,9 +1,8 @@
 # Python PowerDNS Records Exporter
 
-This module can be used to export PowerDNS records database in several ways:
+This tool can be used to export PowerDNS records database in several ways:
 - to bind zone format
-- records metrics for Prometheus
-
+- metrics for Prometheus
 
 ## Installation
 
@@ -25,13 +24,13 @@ See [config file](/pdns_exporter/settings.conf) example for more options.
 Pull the pdns exporter image from Docker Hub.
 
 ```bash
-docker pull dmachard/pdns-exporter:latest
+sudo docker pull dmachard/pdns-exporter:latest
 ```
 
 Deploy the container
 
 ```bash
-docker run -d -p 9090:9090 --name=pdnsexporter01 dmachard/pdns-exporter
+sudo docker run -d -p 9090:9090 --name=pdnsexporter01 dmachard/pdns-exporter
 ```
 
 The container can be configured with the following environment variables:
