@@ -79,10 +79,15 @@ Get a specific zone with zone file format
 ```bash
 $ curl -u changeme:changeme http://127.0.0.1:9090/zone/1
 $ORIGIN .
-test.internal   3600    IN      SOA     a.misconfigured.dns.server.invalid hostmaster.test.internal 0 10800 3600 604800 3600
-test.internal   3600    IN      NS      ns1.test.internal
-ns1.test.internal       3600    IN      A       10.0.0.1
-record.test.internal    300     IN      A       10.0.0.2
+zone.test	3600	IN	SOA	a.misconfigured.dns.server.invalid hostmaster.zone.test 0 10800 3600 604800 3600
+zone.test	3600	IN	NS	ns1.zone.test
+ns1.zone.test	3600	IN	A	128.0.0.1
+a.zone.test	300	IN	A	128.0.0.2
+a2.zone.test	300	IN	A	128.0.0.2
+a2.zone.test	300	IN	A	128.0.0.3
+aaaa.zone.test	300	IN	AAAA	fe80::42:1eff:feed:f6d6
+cname.zone.test	300	IN	CNAME	a.zone.test
+txt.zone.test	300	IN	TXT	"hello world"
 ```
 
 Get metrics for prometheus of each dns zones declared in your dns server
