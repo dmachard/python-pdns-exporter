@@ -60,7 +60,7 @@ async def view_zone(request):
 @router.get("/metrics")
 async def view_metrics(request):
     """return metrics for prometheus"""
-    rtypes = ["soa", "a", "aaaa", "txt", "cname", "ptr", "mx", "ns", "svr", "ptr", "mx"]
+    rtypes = ["soa", "a", "aaaa", "txt", "cname", "ptr", "mx", "ns", "srv", "ptr", "mx"]
 
     # fetch domains and records from database
     async with request.app['db'].acquire() as conn:
