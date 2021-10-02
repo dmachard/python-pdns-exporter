@@ -27,10 +27,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - pdns-version: "pdns-auth-44"
-            test: "hello"
-          - pdns-version: "pdns-auth-45"
-            test: "hello2" 
+          - pdns-version: "44"
+            branch: "auth-4.4.x"
+          - pdns-version: "45"
+            branch: "auth-4.5.x" 
 
     steps:
     - uses: actions/checkout@v2
@@ -43,13 +43,12 @@ jobs:
 
     - name: Import sql schema
       run: |
-        sudo wget https://raw.githubusercontent.com/PowerDNS/pdns/master/modules/gmysqlbackend/schema.mysql.sql
+        sudo wget https://raw.githubusercontent.com/PowerDNS/pdns/rel/${{ matrix.branch }}/modules/gmysqlbackend/schema.mysql.sql
         sudo docker exec -i mariadb sh -c 'exec mysql -u root -p"secret" powerdns' < schema.mysql.sql
 
     - name: Setup PowerDNS
       run: |
-        echo ${{ matrix.test }}
-        sudo docker run -d --network="host" --name powerdns --volume=$PWD/testdata/pdns.conf:/etc/powerdns/pdns.conf:ro powerdns/${{ matrix.pdns-version }}:latest
+        sudo docker run -d --network="host" --name powerdns --volume=$PWD/testdata/pdns.conf:/etc/powerdns/pdns.conf:ro powerdns/pdns-auth-${{ matrix.pdns-version }}:latest
         sudo chmod +x ./testdata/initzone.sh
         sudo ./testdata/initzone.sh
 
