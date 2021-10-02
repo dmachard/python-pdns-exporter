@@ -48,8 +48,8 @@ jobs:
 
     - name: Setup PowerDNS
       run: |
-        echo {{ matrix.test }}
-        sudo docker run -d --network="host" --name powerdns --volume=$PWD/testdata/pdns.conf:/etc/powerdns/pdns.conf:ro powerdns/{{ matrix.pdns-version }}:latest
+        echo ${{ matrix.test }}
+        sudo docker run -d --network="host" --name powerdns --volume=$PWD/testdata/pdns.conf:/etc/powerdns/pdns.conf:ro powerdns/${{ matrix.pdns-version }}:latest
         sudo chmod +x ./testdata/initzone.sh
         sudo ./testdata/initzone.sh
 
