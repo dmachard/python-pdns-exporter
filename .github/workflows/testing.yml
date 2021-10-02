@@ -23,16 +23,17 @@ jobs:
 
   testing-api:
     runs-on: ubuntu-20.04
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
 
     strategy:
       matrix:
-        - pdns-version: 'pdns-auth-44'
-          test: "hello"
-        - pdns-version: 'pdns-auth-45'
-          test: "hello2" 
+      - pdns-version: "pdns-auth-44"
+        test: "hello"
+      - pdns-version: "pdns-auth-45"
+        test: "hello2" 
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
 
     - name: Setup MariaDB
       run: |
