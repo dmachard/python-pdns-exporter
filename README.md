@@ -1,7 +1,7 @@
 # Python PowerDNS Records Exporter
 
 This tool can be used to export PowerDNS records database in several ways:
-- to bind zone format
+- bind zone format
 - metrics for Prometheus
 
 ## Installation
