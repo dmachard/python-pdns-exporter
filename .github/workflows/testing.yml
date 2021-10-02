@@ -26,10 +26,11 @@ jobs:
 
     strategy:
       matrix:
-      - pdns-version: "pdns-auth-44"
-        test: "hello"
-      - pdns-version: "pdns-auth-45"
-        test: "hello2" 
+        include:
+          - pdns-version: "pdns-auth-44"
+            test: "hello"
+          - pdns-version: "pdns-auth-45"
+            test: "hello2" 
 
     steps:
     - uses: actions/checkout@v2
