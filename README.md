@@ -1,10 +1,6 @@
 # Python PowerDNS Records Exporter
 
-![powerdns auth 4.4.x](https://img.shields.io/badge/pdns4.4.x-tested-green) ![powerdns auth 4.5.x](https://img.shields.io/badge/pdns4.5.x-tested-green) 
-
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/python-pdns-exporter)
+![powerdns auth 4.4.x](https://img.shields.io/badge/pdns 4.4.x-tested-green) ![powerdns auth 4.5.x](https://img.shields.io/badge/pdns 4.5.x-tested-green) 
 
 This tool can be used to export PowerDNS records database in several ways:
 - bind zone format
