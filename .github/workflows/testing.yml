@@ -31,6 +31,7 @@ jobs:
 
     strategy:
       matrix:
+        python: [ '3.8', '3.9', '3.10' ]
         include:
           - pdns-version: "44"
             branch: "auth-4.4.x"
@@ -40,6 +41,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python }}
 
     - name: Setup MariaDB
       run: |
