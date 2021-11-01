@@ -60,6 +60,6 @@ jobs:
 
     - name: Check zone format
       run: |
-        sudo apt-get update && apt-get install -y bind9utils
+        sudo apt-get update && sudo apt-get install -y bind9utils
         sudo cat /tmp/db.zone.test
         sudo named-checkzone zone.test /tmp/db.zone.test
