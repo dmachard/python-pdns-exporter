@@ -60,6 +60,7 @@ jobs:
     - name: Setup PowerDNS
       run: |
         sudo docker run -d --network="host" --name powerdns --volume=$PWD/testdata/pdns.conf:/etc/powerdns/pdns.conf:ro powerdns/pdns-auth-${{ matrix.pdns-version }}:latest
+        sudo docker logs powerdns
         sudo chmod +x ./testdata/initzone.sh
         sudo ./testdata/initzone.sh
 
