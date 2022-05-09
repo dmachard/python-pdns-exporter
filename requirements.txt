@@ -1,4 +1,4 @@
 aiohttp==3.8.1
-aiomysql==0.1.0
+aiomysql==0.1.1
 requests==2.27.1
 SQLAlchemy==1.4.36
