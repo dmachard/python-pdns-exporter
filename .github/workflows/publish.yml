@@ -6,7 +6,7 @@ on:
 
 jobs:
   publish-pypi:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
@@ -33,7 +33,7 @@ jobs:
         twine upload dist/* -u ${{ secrets.PYPI_LOGIN }} -p ${{ secrets.PYPI_PASSWORD }}
 
   publish-dockerhub:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v2
 
