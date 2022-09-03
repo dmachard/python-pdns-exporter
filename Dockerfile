@@ -1,4 +1,4 @@
-FROM python:3.8-alpine
+FROM python:3.10.6-alpine
 
 LABEL name="Python PowerDNS records exporter" \
       description="Python PowerDNS records exporter" \
