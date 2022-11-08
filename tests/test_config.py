@@ -3,7 +3,7 @@ import os
 
 from pdns_exporter import exporter
 
-EXTERNAL_SETTINGS_PATH = "/etc/pdns-exporter/settings.conf.test"
+EXTERNAL_SETTINGS_PATH = "/tmp/pdns-exporter/settings.conf.test"
 
 class args:
     c = None
