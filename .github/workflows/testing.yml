@@ -23,8 +23,9 @@ jobs:
     - name: Run Python tests 
       run: |
         sudo mkdir /etc/pdns-exporter/
-        sudo python3 -m pip install -r requirements.txt 
-        sudo python3 -m unittest tests.test_config -v
+        python --version
+        python -m pip install -r requirements.txt 
+        python -m unittest tests.test_config -v
 
   testing-api:
     runs-on: ubuntu-22.04
@@ -67,9 +68,10 @@ jobs:
 
     - name: Run Python tests 
       run: |
-        sudo python3 -m pip install -r requirements.txt 
-        sudo python3 -m unittest tests.test_webapp -v
-        sudo python3 -m unittest tests.test_package -v
+        python --version
+        python -m pip install -r requirements.txt 
+        python -m unittest tests.test_webapp -v
+        python -m unittest tests.test_package -v
 
     - name: Check zone format
       run: |
