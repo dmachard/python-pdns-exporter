@@ -58,7 +58,7 @@ jobs:
     - name: Import sql schema
       run: |
         sudo wget https://raw.githubusercontent.com/PowerDNS/pdns/rel/${{ matrix.branch }}/modules/gmysqlbackend/schema.mysql.sql
-        sudo docker exec -i mariadb sh -c 'exec mysql -u root -p"secret" powerdns' < schema.mysql.sql
+        sudo docker exec -i mariadb sh -c 'exec mariadb -u root -p"secret" powerdns' < schema.mysql.sql
 
     - name: Setup PowerDNS
       run: |
