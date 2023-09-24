@@ -110,7 +110,7 @@ See [metrics file](/metrics.txt) example.
 
 ### Run 
 
-the dnstap receiver from source
+from source
 
 ```bash
 sudo python3 -c "from pdns_exporter import exporter; exporter.start_exporter();" -v
